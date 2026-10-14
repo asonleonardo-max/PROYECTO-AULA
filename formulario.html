@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Registrar zapato · JP CALZADO</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="estilos-extra.css">
+</head>
+<body>
+
+  <div class="app">
+
+    <aside class="lateral">
+      <div class="logo"><b>JP</b> JP CALZADO</div>
+      <small>GESTIÓN DE TIENDA</small>
+
+      <nav class="menu">
+        <a href="index.html">Inventario</a>
+        <a class="activo" href="formulario.html">Registrar zapato</a>
+      </nav>
+    </aside>
+
+    <main class="contenido">
+
+      <div class="encabezado">
+        <div>
+          <h1 id="titulo-formulario">Registrar zapato</h1>
+          <p>Completa los datos del calzado. Los campos son obligatorios, excepto la imagen.</p>
+        </div>
+      </div>
+
+      <form id="formulario-zapato" class="tarjeta-formulario" novalidate>
+        <div class="cuadricula-campos">
+
+          <div class="campo ancho-completo">
+            <label for="nombre">Nombre del zapato</label>
+            <input id="nombre" name="nombre" type="text" placeholder="Ej. Nike Air Max">
+            <small class="error" data-error-de="nombre"></small>
+          </div>
+
+          <div class="campo">
+            <label for="marca-campo">Marca</label>
+            <select id="marca-campo" name="marca">
+              <option value="">Selecciona una marca</option>
+              <option>Adidas</option>
+              <option>Converse</option>
+              <option>New Balance</option>
+              <option>Nike</option>
+              <option>Puma</option>
+              <option>Vans</option>
+            </select>
+            <small class="error" data-error-de="marca"></small>
+          </div>
+
+          <div class="campo">
+            <label for="categoria-campo">Categoría</label>
+            <select id="categoria-campo" name="categoria">
+              <option value="">Selecciona una categoría</option>
+              <option>Deportivos</option>
+              <option>Casuales</option>
+            </select>
+            <small class="error" data-error-de="categoria"></small>
+          </div>
+
+          <div class="campo">
+            <label for="talla">Talla</label>
+            <input id="talla" name="talla" type="number" min="30" max="50" placeholder="Ej. 40">
+            <small class="error" data-error-de="talla"></small>
+          </div>
+
+          <div class="campo">
+            <label for="precio">Precio (COP)</label>
+            <input id="precio" name="precio" type="number" min="0" step="1000" placeholder="Ej. 350000">
+            <small class="error" data-error-de="precio"></small>
+          </div>
+
+          <div class="campo">
+            <label for="disponibles">Unidades disponibles</label>
+            <input id="disponibles" name="disponibles" type="number" min="0" placeholder="Ej. 8">
+            <small class="error" data-error-de="disponibles"></small>
+          </div>
+
+          <div class="campo">
+            <label for="estado-campo">Estado</label>
+            <select id="estado-campo" name="estado">
+              <option value="">Selecciona un estado</option>
+              <option>Activo</option>
+              <option>Inactivo</option>
+            </select>
+            <small class="error" data-error-de="estado"></small>
+          </div>
+
+          <div class="campo ancho-completo">
+            <label for="imagen">Enlace de la imagen (opcional)</label>
+            <input id="imagen" name="imagen" type="url" placeholder="https://...">
+            <small class="error" data-error-de="imagen"></small>
+          </div>
+
+        </div>
+
+        <div class="acciones-formulario">
+          <button class="boton" type="submit">Guardar zapato</button>
+          <a class="boton-secundario" href="index.html">Cancelar</a>
+        </div>
+      </form>
+
+    </main>
+
+  </div>
+
+  <script src="almacenamiento.js"></script>
+  <script src="inventario.js"></script>
+  <script src="interfaz.js"></script>
+  <script src="formulario.js"></script>
+
+</body>
+</html>
