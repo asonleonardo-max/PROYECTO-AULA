@@ -1,0 +1,350 @@
+:root {
+  --naranja: #e8421a;
+  --fondo: #f4f3ec;
+  --borde: #e5e3d8;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  background: var(--fondo);
+  margin: 0;
+}
+
+.boton {
+  background: var(--naranja);
+  color: white;
+  padding: 10px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+input {
+  padding: 10px;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  margin: 16px 0;
+  width: 100%;
+}
+
+table {
+  width: 100%;
+  background: white;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--borde);
+}
+
+.encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.encabezado h1 {
+  margin-bottom: 8px;
+}
+
+.encabezado p {
+  margin-top: 0;
+}
+
+.boton {
+  display: inline-block;
+  background: var(--naranja);
+  color: white;
+  padding: 10px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.tabla-inventario {
+  width: 100%;
+  background: white;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.tabla-inventario th {
+  background: #f4f3ec;
+  color: #333;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.tabla-inventario th,
+.tabla-inventario td {
+  padding: 14px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--borde);
+}
+
+.tabla-inventario tbody tr:hover {
+  background: #faf9f5;
+}
+
+.tabla-inventario tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.tabla-inventario button {
+  cursor: pointer;
+}
+
+.tabla-inventario a {
+  text-decoration: none;
+}
+
+.app {
+  display: flex;
+  min-height: 100vh;
+}
+
+.lateral {
+  width: 240px;
+  background: white;
+  border-right: 1px solid var(--borde);
+  padding: 20px;
+}
+
+.logo {
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.logo b {
+  background: var(--naranja);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 20px;
+}
+
+.menu a {
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: #333;
+  text-decoration: none;
+}
+
+.menu a.activo {
+  background: #fdeae5;
+  color: var(--naranja);
+}
+
+.contenido {
+  flex: 1;
+  padding: 24px;
+}
+
+.estadisticas {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.tarjeta {
+  background: white;
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  padding: 16px 20px;
+}
+
+.tarjeta b {
+  display: block;
+  font-size: 28px;
+  margin-bottom: 4px;
+}
+
+.tarjeta span {
+  color: #666;
+  font-size: 14px;
+}
+
+.filtros {
+  display: flex;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.filtros input {
+  flex: 1;
+  margin: 0;
+}
+
+.filtros select {
+  padding: 10px;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  background: white;
+  font-size: 14px;
+}
+
+.producto {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.foto {
+  width: 48px;
+  height: 48px;
+  background: #ecebe3;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.producto small {
+  display: block;
+  color: #777;
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.etiqueta {
+  background: #e3f5e8;
+  color: #1f7a3d;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.etiqueta.inactivo {
+  background: #ecebe3;
+  color: #777;
+}
+
+.alerta {
+  display: block;
+  color: var(--naranja);
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.icono {
+  display: inline-block;
+  padding: 6px 10px;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  background: white;
+  color: #333;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.icono.eliminar {
+  color: #c62828;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Tableta: la tabla puede deslizarse si no cabe */
+.contenedor-tabla {
+  overflow-x: auto;
+}
+
+.vacio {
+  text-align: center;
+  color: #777;
+  padding: 24px;
+}
+
+/* Celular */
+@media (max-width: 768px) {
+
+  .app {
+    flex-direction: column;
+  }
+
+  .lateral {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--borde);
+  }
+
+  .menu {
+    flex-direction: row;
+    margin-top: 12px;
+  }
+
+  .contenido {
+    padding: 16px;
+  }
+
+  .encabezado {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .boton {
+    text-align: center;
+  }
+
+  .filtros {
+    flex-wrap: wrap;
+  }
+
+  .filtros input {
+    flex: 1 1 100%;
+  }
+
+  .filtros select {
+    flex: 1 1 45%;
+  }
+
+  /* La tabla se convierte en tarjetas */
+  .tabla-inventario,
+  .tabla-inventario tbody,
+  .tabla-inventario tr,
+  .tabla-inventario td {
+    display: block;
+  }
+
+  .tabla-inventario {
+    background: transparent;
+  }
+
+  .tabla-inventario thead {
+    display: none;
+  }
+
+  .tabla-inventario tr {
+    background: white;
+    border: 1px solid var(--borde);
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 16px;
+  }
+
+  .tabla-inventario td {
+    border-bottom: none;
+    padding: 6px 0;
+  }
+
+  .tabla-inventario td[data-label] {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .tabla-inventario td[data-label]::before {
+    content: attr(data-label);
+    color: #777;
+  }
+}

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inventario de zapatos · JP CALZADO</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="app">
+
+    <aside class="lateral">
+      <div class="logo"><b>JP</b> JP CALZADO</div>
+      <small>GESTIÓN DE TIENDA</small>
+
+      <nav class="menu">
+        <a class="activo" href="index.html">Inventario</a>
+        <a href="formulario.html">Registrar zapato</a>
+      </nav>
+    </aside>
+
+    <main class="contenido">
+
+      <div class="encabezado">
+        <div>
+          <h1>Inventario de zapatos</h1>
+          <p>Consulta y gestiona el calzado de tu tienda.</p>
+        </div>
+
+        <a class="boton" href="formulario.html">+ Registrar zapato</a>
+      </div>
+
+      <div class="estadisticas">
+        <div class="tarjeta">
+          <b>6</b>
+          <span>Modelos registrados</span>
+        </div>
+
+        <div class="tarjeta">
+          <b>38</b>
+          <span>Unidades en inventario</span>
+        </div>
+
+        <div class="tarjeta">
+          <b>2</b>
+          <span>Alertas de existencias</span>
+        </div>
+      </div>
+
+      <div class="filtros">
+        <input
+          id="buscar"
+          type="search"
+          placeholder="Buscar por nombre, código o marca"
+        >
+
+        <select id="categoria">
+          <option value="">Todas las categorías</option>
+          <option>Deportivos</option>
+          <option>Casuales</option>
+        </select>
+
+        <select id="marca">
+          <option value="">Todas las marcas</option>
+          <option>Adidas</option>
+          <option>Converse</option>
+          <option>New Balance</option>
+          <option>Nike</option>
+          <option>Puma</option>
+          <option>Vans</option>
+        </select>
+
+        <select id="estado">
+          <option value="">Todos los estados</option>
+          <option>Activo</option>
+          <option>Inactivo</option>
+        </select>
+      </div>
+
+      <div class="contenedor-tabla">
+
+        <table class="tabla-inventario">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Categoría</th>
+              <th>Talla</th>
+              <th>Precio (COP)</th>
+              <th>Disponibilidad</th>
+              <th>Estado</th>
+              <th>Editar / Eliminar</th>
+            </tr>
+          </thead>
+
+          <tbody id="lista">
+
+            <tr data-id="JP-002" data-marca="Adidas"
+                data-categoria="Deportivos" data-estado="Activo">
+              <td>
+                <div class="producto">
+                  <span class="foto"></span>
+                  <div>
+                    <b>Adidas Grand Court</b>
+                    <small>JP-002 · Adidas</small>
+                  </div>
+                </div>
+              </td>
+              <td data-label="Categoría">Deportivos</td>
+              <td data-label="Talla">39</td>
+              <td data-label="Precio">$280.000</td>
+              <td data-label="Disponibilidad">12 disponibles</td>
+              <td data-label="Estado">
+                <span class="etiqueta">Activo</span>
+              </td>
+              <td>
+                <a class="icono" href="formulario.html?id=JP-002">Editar</a>
+                <button class="icono eliminar" type="button">Eliminar</button>
+              </td>
+            </tr>
+
+            <tr data-id="JP-004" data-marca="Converse"
+                data-categoria="Casuales" data-estado="Activo">
+              <td>
+                <div class="producto">
+                  <span class="foto"></span>
+                  <div>
+                    <b>Converse Chuck Taylor</b>
+                    <small>JP-004 · Converse</small>
+                  </div>
+                </div>
+              </td>
+              <td data-label="Categoría">Casuales</td>
+              <td data-label="Talla">38</td>
+              <td data-label="Precio">$260.000</td>
+              <td data-label="Disponibilidad">
+                0 disponibles <span class="alerta">Sin existencias</span>
+              </td>
+              <td data-label="Estado">
+                <span class="etiqueta">Activo</span>
+              </td>
+              <td>
+                <a class="icono" href="formulario.html?id=JP-004">Editar</a>
+                <button class="icono eliminar" type="button">Eliminar</button>
+              </td>
+            </tr>
+
+            <tr data-id="JP-005" data-marca="New Balance"
+                data-categoria="Deportivos" data-estado="Activo">
+              <td>
+                <div class="producto">
+                  <span class="foto"></span>
+                  <div>
+                    <b>New Balance 574</b>
+                    <small>JP-005 · New Balance</small>
+                  </div>
+                </div>
+              </td>
+              <td data-label="Categoría">Deportivos</td>
+              <td data-label="Talla">42</td>
+              <td data-label="Precio">$390.000</td>
+              <td data-label="Disponibilidad">6 disponibles</td>
+              <td data-label="Estado">
+                <span class="etiqueta">Activo</span>
+              </td>
+              <td>
+                <a class="icono" href="formulario.html?id=JP-005">Editar</a>
+                <button class="icono eliminar" type="button">Eliminar</button>
+              </td>
+            </tr>
+
+            <tr data-id="JP-001" data-marca="Nike"
+                data-categoria="Deportivos" data-estado="Activo">
+              <td>
+                <div class="producto">
+                  <span class="foto"></span>
+                  <div>
+                    <b>Nike Air Max</b>
+                    <small>JP-001 · Nike</small>
+                  </div>
+                </div>
+              </td>
+              <td data-label="Categoría">Deportivos</td>
+              <td data-label="Talla">40</td>
+              <td data-label="Precio">$350.000</td>
+              <td data-label="Disponibilidad">8 disponibles</td>
+              <td data-label="Estado">
+                <span class="etiqueta">Activo</span>
+              </td>
+              <td>
+                <a class="icono" href="formulario.html?id=JP-001">Editar</a>
+                <button class="icono eliminar" type="button">Eliminar</button>
+              </td>
+            </tr>
+
+            <tr data-id="JP-003" data-marca="Puma"
+                data-categoria="Deportivos" data-estado="Activo">
+              <td>
+                <div class="producto">
+                  <span class="foto"></span>
+                  <div>
+                    <b>Puma Smash</b>
+                    <small>JP-003 · Puma</small>
+                  </div>
+                </div>
+              </td>
+              <td data-label="Categoría">Deportivos</td>
+              <td data-label="Talla">41</td>
+              <td data-label="Precio">$220.000</td>
+              <td data-label="Disponibilidad">
+                3 disponibles <span class="alerta">Stock bajo</span>
+              </td>
+              <td data-label="Estado">
+                <span class="etiqueta">Activo</span>
+              </td>
+              <td>
+                <a class="icono" href="formulario.html?id=JP-003">Editar</a>
+                <button class="icono eliminar" type="button">Eliminar</button>
+              </td>
+            </tr>
+
+            <tr data-id="JP-006" data-marca="Vans"
+                data-categoria="Casuales" data-estado="Inactivo">
+              <td>
+                <div class="producto">
+                  <span class="foto"></span>
+                  <div>
+                    <b>Vans Old Skool</b>
+                    <small>JP-006 · Vans</small>
+                  </div>
+                </div>
+              </td>
+              <td data-label="Categoría">Casuales</td>
+              <td data-label="Talla">40</td>
+              <td data-label="Precio">$290.000</td>
+              <td data-label="Disponibilidad">9 disponibles</td>
+              <td data-label="Estado">
+                <span class="etiqueta inactivo">Inactivo</span>
+              </td>
+              <td>
+                <a class="icono" href="formulario.html?id=JP-006">Editar</a>
+                <button class="icono eliminar" type="button">Eliminar</button>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+
+        <p id="vacio" class="vacio" hidden>
+          No se encontraron zapatos con esos filtros.
+        </p>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <script src="app.js"></script>
+
+</body>
+</html>
