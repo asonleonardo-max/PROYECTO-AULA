@@ -9,6 +9,11 @@
 
 [hidden] { display: none !important; }
 
+html {
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
+}
+
 body {
   margin: 0;
   font-family: system-ui, sans-serif;

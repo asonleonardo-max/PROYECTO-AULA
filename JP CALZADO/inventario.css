@@ -231,3 +231,16 @@
   .tabla-inventario td:last-child a.icono::after { content: "Editar"; }
   .tabla-inventario td:last-child button.icono::after { content: "Eliminar"; }
 }
+
+/* Columnas con ancho fijo en PC: no se mueven al filtrar */
+@media (min-width: 769px) {
+  .tabla-inventario { table-layout: fixed; min-width: 900px; }
+
+  .tabla-inventario th:nth-child(1) { width: 31%; }
+  .tabla-inventario th:nth-child(2) { width: 12%; }
+  .tabla-inventario th:nth-child(3) { width: 7%; }
+  .tabla-inventario th:nth-child(4) { width: 12%; }
+  .tabla-inventario th:nth-child(5) { width: 15%; }
+  .tabla-inventario th:nth-child(6) { width: 10%; }
+  .tabla-inventario th:nth-child(7) { width: 13%; }
+}
