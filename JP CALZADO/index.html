@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inventario de zapatos · JP CALZADO</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="inventario.css">
+</head>
+<body>
+
+  <div class="app">
+
+    <aside class="lateral">
+      <div class="logo"><b>JP</b> JP CALZADO</div>
+      <small class="seccion">GESTIÓN DE TIENDA</small>
+
+      <nav class="menu">
+        <a class="activo" href="index.html"><img src="iconos/cubo_nara.png" alt=""> Inventario</a>
+        <a href="formulario.html"><img src="iconos/mas_neg.png" alt=""> Registrar zapato</a>
+      </nav>
+
+      <div class="promo">
+        <img src="iconos/huella.png" alt="" width="28" height="28">
+        <h3>Tu próximo paso empieza aquí.</h3>
+        <p>Calzado para moverte. Inventario para avanzar.</p>
+      </div>
+
+      <div class="usuario">
+        <span class="avatar">JP</span>
+        <div><b>Jordan Admin</b><small>Administración</small></div>
+      </div>
+    </aside>
+
+    <main class="contenido">
+
+      <header class="barra">
+        <p class="ruta">Gestión <span>›</span> <b>Inventario de zapatos</b></p>
+        <span class="tienda"><img src="iconos/tienda.png" alt=""> Tienda principal • COP</span>
+      </header>
+
+      <div class="encabezado">
+        <div>
+          <h1>Inventario de zapatos</h1>
+          <p>Consulta y gestiona el calzado de tu tienda.</p>
+        </div>
+        <a class="boton" href="formulario.html">+ Registrar zapato</a>
+      </div>
+
+      <div class="estadisticas">
+        <div class="tarjeta">
+          <div class="tarjeta-icono_registro">
+            <img src="iconos/cubo_negro.png" alt="" width="28" height="28">
+          </div>
+          <div><b id="stat-modelos">6</b><span>Modelos registrados</span></div>
+        </div>
+        <div class="tarjeta">
+          <div class="tarjeta-icono_inventario">
+            <img src="iconos/caja_envia.png" alt="" width="28" height="28">
+          </div>
+          <div><b id="stat-unidades">38</b><span>Unidades en inventario</span></div>
+        </div>
+        <div class="tarjeta">
+          <div class="tarjeta-icono peligro">
+            <img src="iconos/advertencia.png" alt="" width="28" height="28">
+          </div>
+          <div><b id="stat-alertas">2</b><span>Alertas de existencias</span></div>
+        </div>
+      </div>
+
+      <div class="filtros">
+        <input id="buscar" type="search" placeholder="Buscar por nombre, código o marca">
+
+        <select id="categoria">
+          <option value="">Todas las categorías</option>
+          <option>Deportivos</option>
+          <option>Casuales</option>
+        </select>
+
+        <select id="marca">
+          <option value="">Todas las marcas</option>
+          <option>Adidas</option>
+          <option>Converse</option>
+          <option>New Balance</option>
+          <option>Nike</option>
+          <option>Puma</option>
+          <option>Vans</option>
+        </select>
+
+        <select id="estado">
+          <option value="">Todos los estados</option>
+          <option>Activo</option>
+          <option>Inactivo</option>
+        </select>
+      </div>
+
+      <div class="contenedor-tabla">
+        <div class="lista-barra">
+          <b id="contador">6 zapatos</b>
+        </div>
+
+        <table class="tabla-inventario">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Categoría</th>
+              <th>Talla</th>
+              <th>Precio (COP)</th>
+              <th>Disponibilidad</th>
+              <th>Estado</th>
+              <th>Editar / Eliminar</th>
+            </tr>
+          </thead>
+
+          <!-- Las filas las dibuja la vista (vista-inventario.js) -->
+          <tbody id="lista"></tbody>
+        </table>
+
+        <p id="vacio" class="vacio" hidden>No se encontraron zapatos con esos filtros.</p>
+      </div>
+
+      <div class="pie-lista">
+        <span id="mostrando">Mostrando 1-6 de 6</span>
+        <span class="pagina">1</span>
+      </div>
+
+    </main>
+  </div>
+
+  <div class="modal" id="modal" hidden>
+    <div class="caja" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
+      <button class="cerrar" id="cerrar" type="button" aria-label="Cerrar">×</button>
+
+      <span class="modal-icono">
+        <img src="iconos/eliminar.png" alt="" width="20" height="20">
+      </span>
+
+      <h2 id="modal-titulo">¿Eliminar este zapato?</h2>
+      <p><b id="nombre-zapato"></b> se eliminará del inventario. Esta acción es permanente y no se puede deshacer.</p>
+
+      <div class="resumen">
+        <span class="foto"></span>
+        <div class="resumen-datos">
+          <b id="r-nombre"></b>
+          <small id="r-codigo"></small>
+          <small id="r-detalle"></small>
+        </div>
+        <div class="resumen-precio">
+          <b id="r-precio"></b>
+          <small id="r-stock"></small>
+        </div>
+      </div>
+
+      <p class="advertencia">Se borrarán la imagen y todos los datos de este registro.</p>
+
+      <div class="acciones">
+        <button class="btn" id="cancelar" type="button">Cancelar</button>
+        <button class="btn peligro" id="confirmar" type="button">Eliminar zapato</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="modelo/modelo.js"></script>
+  <script src="vista/vista-inventario.js"></script>
+  <script src="controlador/controlador-inventario.js"></script>
+
+</body>
+</html>
