@@ -1,13 +1,24 @@
-/* VISTA del inventario: solo pinta y lee el DOM. No tiene reglas de negocio. */
+/* VISTA del inventario: construye la tabla con el DOM y lee los filtros.
+   No tiene reglas de negocio ni toca localStorage. */
 
 function formatearPrecio(numero) {
   return "$" + String(numero).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 
-function escapar(texto) {
-  const div = document.createElement("div");
-  div.textContent = texto;
-  return div.innerHTML;
+function crearElemento(etiqueta, clase, texto) {
+  const elemento = document.createElement(etiqueta);
+
+  if (clase) {
+    elemento.className = clase;
+  }
+  if (texto !== undefined) {
+    elemento.textContent = texto;
+  }
+  return elemento;
+}
+
+function escribirTexto(id, texto) {
+  document.getElementById(id).textContent = texto;
 }
 
 class InventarioVista {
@@ -23,44 +34,117 @@ class InventarioVista {
     this.modal = document.getElementById("modal");
   }
 
-  /* ---------- Pintar ---------- */
-  renderEstadisticas({ modelos, unidades, alertas }) {
-    document.getElementById("stat-modelos").textContent = modelos;
-    document.getElementById("stat-unidades").textContent = unidades;
-    document.getElementById("stat-alertas").textContent = alertas;
+  /* ---------- Piezas de cada fila ---------- */
+  crearFoto(zapato) {
+    if (!zapato.imagen) {
+      return crearElemento("span", "foto");
+    }
+    const foto = crearElemento("img", "foto");
+    foto.alt = "";
+    foto.src = zapato.imagen;
+    return foto;
   }
 
+  crearCeldaProducto(zapato) {
+    const datos = document.createElement("div");
+    datos.append(
+      crearElemento("b", "", zapato.nombre),
+      crearElemento("small", "", zapato.codigo + " · " + zapato.marca)
+    );
+
+    const producto = crearElemento("div", "producto");
+    producto.append(this.crearFoto(zapato), datos);
+
+    const celda = document.createElement("td");
+    celda.append(producto);
+    return celda;
+  }
+
+  crearCeldaTexto(etiqueta, texto) {
+    const celda = crearElemento("td", "", texto);
+    celda.dataset.label = etiqueta;
+    return celda;
+  }
+
+  crearCeldaDisponibilidad(zapato, alerta) {
+    const celda = this.crearCeldaTexto("Disponibilidad", zapato.cantidad + " disponibles");
+
+    if (alerta) {
+      celda.append(" ", crearElemento("span", "alerta", alerta));
+    }
+    return celda;
+  }
+
+  crearCeldaEstado(zapato) {
+    const clase = zapato.estado === "Inactivo" ? "etiqueta inactivo" : "etiqueta";
+    const celda = crearElemento("td");
+    celda.dataset.label = "Estado";
+    celda.append(crearElemento("span", clase, zapato.estado));
+    return celda;
+  }
+
+  crearIcono(ruta) {
+    const icono = crearElemento("img");
+    icono.src = ruta;
+    icono.alt = "";
+    icono.width = 18;
+    icono.height = 18;
+    return icono;
+  }
+
+  crearCeldaAcciones(zapato) {
+    const editar = crearElemento("a", "icono");
+    editar.href = "formulario.html?id=" + encodeURIComponent(zapato.codigo);
+    editar.setAttribute("aria-label", "Editar");
+    editar.append(this.crearIcono("iconos/lapiz.png"));
+
+    const eliminar = crearElemento("button", "icono eliminar");
+    eliminar.type = "button";
+    eliminar.setAttribute("aria-label", "Eliminar");
+    eliminar.append(this.crearIcono("iconos/eliminar.png"));
+
+    const celda = document.createElement("td");
+    celda.append(editar, eliminar);
+    return celda;
+  }
+
+  crearFila(zapato, alerta) {
+    const fila = document.createElement("tr");
+    fila.dataset.id = zapato.codigo;
+    fila.append(
+      this.crearCeldaProducto(zapato),
+      this.crearCeldaTexto("Categoría", zapato.categoria),
+      this.crearCeldaTexto("Talla", zapato.talla),
+      this.crearCeldaTexto("Precio", formatearPrecio(zapato.precio)),
+      this.crearCeldaDisponibilidad(zapato, alerta),
+      this.crearCeldaEstado(zapato),
+      this.crearCeldaAcciones(zapato)
+    );
+    return fila;
+  }
+
+  /* ---------- Pintar la pantalla ---------- */
   renderLista(zapatos, total, alertaStock) {
-    this.lista.innerHTML = zapatos.map(function (z) {
-      const alerta = alertaStock(z);
-      const claseEstado = z.estado === "Inactivo" ? "etiqueta inactivo" : "etiqueta";
+    this.lista.replaceChildren(...zapatos.map((zapato) => this.crearFila(zapato, alertaStock(zapato))));
+    this.renderContadores(zapatos.length, total);
+  }
 
-      return `
-        <tr data-id="${escapar(z.codigo)}">
-          <td><div class="producto"><span class="foto"></span>
-            <div><b>${escapar(z.nombre)}</b><small>${escapar(z.codigo)} · ${escapar(z.marca)}</small></div></div></td>
-          <td data-label="Categoría">${escapar(z.categoria)}</td>
-          <td data-label="Talla">${z.talla}</td>
-          <td data-label="Precio">${formatearPrecio(z.precio)}</td>
-          <td data-label="Disponibilidad">${z.cantidad} disponibles${alerta ? ` <span class="alerta">${alerta}</span>` : ""}</td>
-          <td data-label="Estado"><span class="${claseEstado}">${escapar(z.estado)}</span></td>
-          <td>
-            <a class="icono" href="formulario.html?id=${encodeURIComponent(z.codigo)}" aria-label="Editar">
-              <img src="iconos/lapiz.png" alt="" width="18" height="18">
-            </a>
-            <button class="icono eliminar" type="button" aria-label="Eliminar">
-              <img src="iconos/eliminar.png" alt="" width="18" height="18">
-            </button>
-          </td>
-        </tr>`;
-    }).join("");
-
-    const visibles = zapatos.length;
-    this.vacio.hidden = visibles > 0;
+  renderContadores(visibles, total) {
     this.contador.textContent = visibles + (visibles === 1 ? " zapato" : " zapatos");
     this.mostrando.textContent = visibles === 0
       ? "Mostrando 0 de " + total
       : "Mostrando 1-" + visibles + " de " + total;
+
+    this.vacio.hidden = visibles > 0;
+    this.vacio.textContent = total === 0
+      ? "Aún no hay zapatos registrados."
+      : "No se encontraron zapatos con esos filtros.";
+  }
+
+  renderEstadisticas({ modelos, unidades, alertas }) {
+    escribirTexto("stat-modelos", modelos);
+    escribirTexto("stat-unidades", unidades);
+    escribirTexto("stat-alertas", alertas);
   }
 
   /* ---------- Leer ---------- */
@@ -73,14 +157,14 @@ class InventarioVista {
     };
   }
 
-  /* ---------- Modal ---------- */
+  /* ---------- Ventana de eliminar ---------- */
   abrirModal(zapato) {
-    document.getElementById("nombre-zapato").textContent = zapato.nombre;
-    document.getElementById("r-nombre").textContent = zapato.nombre;
-    document.getElementById("r-codigo").textContent = zapato.codigo + " · " + zapato.marca;
-    document.getElementById("r-detalle").textContent = zapato.categoria + " · Talla " + zapato.talla;
-    document.getElementById("r-precio").textContent = formatearPrecio(zapato.precio) + " COP";
-    document.getElementById("r-stock").textContent = zapato.cantidad + " disponibles · " + zapato.estado;
+    escribirTexto("nombre-zapato", zapato.nombre);
+    escribirTexto("r-nombre", zapato.nombre);
+    escribirTexto("r-codigo", zapato.codigo + " · " + zapato.marca);
+    escribirTexto("r-detalle", zapato.categoria + " · Talla " + zapato.talla);
+    escribirTexto("r-precio", formatearPrecio(zapato.precio) + " COP");
+    escribirTexto("r-stock", zapato.cantidad + " disponibles · " + zapato.estado);
     this.modal.hidden = false;
   }
 
@@ -88,7 +172,7 @@ class InventarioVista {
     this.modal.hidden = true;
   }
 
-  /* ---------- Eventos (el controlador pasa qué hacer) ---------- */
+  /* ---------- Eventos (el controlador dice qué hacer) ---------- */
   alCambiarFiltros(handler) {
     this.buscar.addEventListener("input", handler);
     this.categoria.addEventListener("change", handler);
@@ -99,6 +183,7 @@ class InventarioVista {
   alPedirEliminar(handler) {
     this.lista.addEventListener("click", function (evento) {
       const boton = evento.target.closest(".eliminar");
+
       if (boton) {
         handler(boton.closest("tr").dataset.id);
       }

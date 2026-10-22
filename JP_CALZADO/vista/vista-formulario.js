@@ -1,7 +1,7 @@
-/* VISTA del formulario: solo lee y pinta el DOM. */
+/* VISTA del formulario: solo lee y pinta el DOM. No valida ni guarda. */
 
-/* Nombre lógico del campo -> id del elemento en el HTML */
-const IDS = {
+/* Nombre del dato -> id del campo en el HTML */
+const IDS_CAMPOS = {
   codigo: "codigo",
   nombre: "nombre",
   marca: "f-marca",
@@ -9,8 +9,7 @@ const IDS = {
   talla: "talla",
   precio: "precio",
   cantidad: "cantidad",
-  estado: "f-estado",
-  imagen: "imagen"
+  estado: "f-estado"
 };
 
 function unir(lista) {
@@ -35,49 +34,44 @@ class FormularioVista {
     this.nombreArchivo = document.getElementById("nombre-archivo");
     this.cambiar = document.getElementById("cambiar");
 
-    /* Si el zapato aún no tiene foto, se queda el recuadro vacío */
+    this.imagenGuardada = "";
     this.vista.addEventListener("error", () => this.quitarVista());
-    this.form.addEventListener("reset", () => this.quitarVista());
     this.activarArrastrar();
   }
 
   campo(nombre) {
-    return document.getElementById(IDS[nombre]);
+    return document.getElementById(IDS_CAMPOS[nombre] || nombre);
   }
 
-  /* ---------- Leer ---------- */
+  /* ---------- Leer y llenar ---------- */
   leerDatos() {
-    return {
-      codigo: this.campo("codigo").value,
-      nombre: this.campo("nombre").value,
-      marca: this.campo("marca").value,
-      categoria: this.campo("categoria").value,
-      talla: this.campo("talla").value,
-      precio: this.campo("precio").value,
-      cantidad: this.campo("cantidad").value,
-      estado: this.campo("estado").value,
-      imagen: this.inputImagen.files[0] || null
-    };
+    const valores = {};
+
+    Object.keys(IDS_CAMPOS).forEach((nombre) => {
+      valores[nombre] = this.campo(nombre).value.trim();
+    });
+    valores.codigo = valores.codigo.toUpperCase();
+    valores.imagen = this.inputImagen.files[0] || null;
+    return valores;
+  }
+
+  llenarFormulario(zapato) {
+    Object.keys(IDS_CAMPOS).forEach((nombre) => {
+      this.campo(nombre).value = zapato[nombre];
+    });
   }
 
   /* ---------- Modo editar ---------- */
-  activarModoEditar(zapato) {
+  cambiarTextosAEdicion(zapato) {
+    document.title = "Editar zapato · JP CALZADO";
     document.getElementById("titulo").textContent = "Editar zapato";
     document.getElementById("subtitulo").textContent = "Actualiza la información de " + zapato.nombre + " · " + zapato.codigo + ".";
     this.guardarBtn.textContent = "✓ Guardar cambios";
     this.notaPie.textContent = "Los cambios no se guardan hasta confirmar.";
     this.notaOriginal = this.notaPie.textContent;
-    document.title = "Editar zapato · JP CALZADO";
+  }
 
-    this.campo("codigo").value = zapato.codigo;
-    this.campo("nombre").value = zapato.nombre;
-    this.campo("marca").value = zapato.marca;
-    this.campo("categoria").value = zapato.categoria;
-    this.campo("talla").value = zapato.talla;
-    this.campo("precio").value = zapato.precio;
-    this.campo("cantidad").value = zapato.cantidad;
-    this.campo("estado").value = zapato.estado;
-
+  mostrarRegistroActual(zapato) {
     document.getElementById("antes-guardar").hidden = true;
     document.getElementById("registro-actual").hidden = false;
     document.getElementById("registro-texto").textContent = "Estás editando " + zapato.codigo + ". Los cambios se aplicarán a este modelo al guardar.";
@@ -86,6 +80,14 @@ class FormularioVista {
     const etiqueta = document.getElementById("registro-estado");
     etiqueta.textContent = zapato.estado;
     etiqueta.classList.toggle("inactivo", zapato.estado === "Inactivo");
+  }
+
+  activarModoEditar(zapato) {
+    this.cambiarTextosAEdicion(zapato);
+    this.llenarFormulario(zapato);
+    this.mostrarRegistroActual(zapato);
+    this.imagenGuardada = zapato.imagen;
+    this.restaurarVista();
   }
 
   /* ---------- Errores ---------- */
@@ -97,41 +99,45 @@ class FormularioVista {
     error.hidden = false;
   }
 
+  limpiarError(campo) {
+    const error = campo.parentElement.querySelector(".error");
+    campo.classList.remove("invalido");
+
+    if (error) {
+      error.textContent = "";
+      error.hidden = true;
+    }
+  }
+
   limpiarErrores() {
-    Object.keys(IDS).forEach((nombre) => {
-      const campo = this.campo(nombre);
-      const error = campo.parentElement.querySelector(".error");
-      campo.classList.remove("invalido");
-      if (error) {
-        error.textContent = "";
-        error.hidden = true;
-      }
-    });
+    document.querySelectorAll(".invalido").forEach((campo) => this.limpiarError(campo));
+    this.aviso.hidden = true;
+    this.notaPie.textContent = this.notaOriginal;
+    this.notaPie.classList.remove("rojo");
+  }
+
+  mostrarAviso(titulo, detalle, textoPie) {
+    const negrita = document.createElement("b");
+    const texto = document.createElement("span");
+    negrita.textContent = titulo;
+    texto.textContent = detalle;
+
+    this.aviso.replaceChildren(negrita, texto);
+    this.aviso.hidden = false;
+    this.notaPie.textContent = textoPie;
+    this.notaPie.classList.add("rojo");
   }
 
   mostrarErrores(errores) {
     const total = errores.length;
 
-    errores.forEach((e) => this.mostrarError(e.campo, e.mensaje));
+    errores.forEach((error) => this.mostrarError(error.campo, error.mensaje));
 
-    this.aviso.innerHTML =
-      "<b>No se pudo guardar: hay " + total + (total === 1 ? " error." : " errores.") + "</b>" +
-      "<span>Revisa " + unir(errores.map(function (e) { return e.etiqueta; })) + ".</span>";
-    this.aviso.hidden = false;
-
-    this.notaPie.textContent = "No se guardó ningún dato. Corrige " + (total === 1 ? "el error." : "los " + total + " errores.");
-    this.notaPie.classList.add("rojo");
-  }
-
-  mostrarExito(reiniciar) {
-    this.aviso.hidden = true;
-    this.aviso.textContent = "";
-    this.notaPie.textContent = this.notaOriginal;
-    this.notaPie.classList.remove("rojo");
-
-    if (reiniciar) {
-      this.form.reset();
-    }
+    this.mostrarAviso(
+      "No se pudo guardar: hay " + total + (total === 1 ? " error." : " errores."),
+      "Revisa " + unir(errores.map(function (error) { return error.etiqueta; })) + ".",
+      "No se guardó ningún dato. Corrige " + (total === 1 ? "el error." : "los " + total + " errores.")
+    );
   }
 
   /* ---------- Imagen ---------- */
@@ -150,6 +156,16 @@ class FormularioVista {
     this.cambiar.hidden = true;
   }
 
+  /* Vuelve a mostrar la foto que ya tenía el zapato (o el recuadro vacío) */
+  restaurarVista() {
+    if (this.imagenGuardada) {
+      this.mostrarVista(this.imagenGuardada);
+      this.nombreArchivo.hidden = true;
+    } else {
+      this.quitarVista();
+    }
+  }
+
   mostrarArchivo(archivo) {
     this.mostrarVista(URL.createObjectURL(archivo));
     this.nombreArchivo.textContent = archivo.name + " · " + Math.round(archivo.size / 1024) + " KB";
@@ -158,7 +174,7 @@ class FormularioVista {
 
   rechazarImagen(mensaje) {
     this.inputImagen.value = "";
-    this.quitarVista();
+    this.restaurarVista();
     this.mostrarError("imagen", mensaje);
   }
 
@@ -180,6 +196,15 @@ class FormularioVista {
     });
   }
 
+  /* ---------- Otros ---------- */
+  bloquearGuardar(bloqueado) {
+    this.guardarBtn.disabled = bloqueado;
+  }
+
+  irAlInventario() {
+    window.location.href = "index.html";
+  }
+
   /* ---------- Eventos ---------- */
   alEnviar(handler) {
     this.form.addEventListener("submit", function (evento) {
@@ -190,12 +215,7 @@ class FormularioVista {
 
   alElegirImagen(handler) {
     this.inputImagen.addEventListener("change", () => {
-      const campo = this.inputImagen.parentElement.querySelector(".error");
-      this.inputImagen.classList.remove("invalido");
-      if (campo) {
-        campo.textContent = "";
-        campo.hidden = true;
-      }
+      this.limpiarError(this.inputImagen);
       handler(this.inputImagen.files[0] || null);
     });
   }

@@ -43,4 +43,4 @@ class InventarioControlador {
   }
 }
 
-new InventarioControlador(new ZapatoModelo(), new InventarioVista());
+new InventarioControlador(new ZapatoModelo(new Almacenamiento()), new InventarioVista());
